@@ -1,8 +1,9 @@
 import { TimelineEvent, VehicleDetails } from '../models/vehicle.model';
 import vehicleData from '../../vehicle-data.json';
 import { parseDateInMs } from '../utils/date-helper';
+import { VehicleTimelineGetter } from '../models/VehicleTimelineGetter.interface';
 
-export class VehicleDataService {
+export class VehicleDataService implements VehicleTimelineGetter {
 
     private vehicleData: { [vrm: string]: VehicleDetails } = {};
 
