@@ -50,5 +50,8 @@
       "text",
       "text-summary"
     ]
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0"
   }
 }
