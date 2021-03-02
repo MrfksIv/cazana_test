@@ -1,0 +1,71 @@
+[
+  {
+    "id": "29257590-5caa-4592-b105-93398c34fde1",
+    "vrm": "KPL754",
+    "make": "Volkswagen",
+    "model": "Golf",
+    "registrationDate": "2007-10-23",
+    "timeline": [
+      {
+        "eventType": "vrm_change",
+        "eventDetails": {
+          "fromVrm": "KPL753",
+          "toVrm": "KPL754"
+        }
+      }
+    ]
+  },
+  {
+    "id": "b3bba5fc-92a4-4dcc-af4d-cd641faf69de",
+    "vrm": "KPL753",
+    "make": "Volkswagen",
+    "model": "Golf",
+    "registrationDate": "2005-10-24",
+    "timeline": [
+      {
+        "eventType": "vrm_change",
+        "eventDetails": {
+          "date": "2005-10-24",
+          "fromVrm": "KPL752",
+          "toVrm": "KPL753"
+        }
+      },
+      {
+        "eventType": "vrm_change",
+        "eventDetails": {
+          "fromVrm": "KPL753",
+          "toVrm": "KPL754"
+        }
+      }
+    ]
+  },
+  {
+    "id": "1f72ab46-6dad-42db-b884-5eb74fce7b44",
+    "vrm": "EKE699",
+    "make": "Toyota",
+    "model": "Rav4",
+    "registrationDate": "2000-11-22"
+  },
+  {
+    "id": "2af56a30-4d6d-4d80-b9b5-f3ed40ff1eee",
+    "vrm": "KPL752",
+    "make": "Volkswagen",
+    "model": "Golf",
+    "registrationDate": "2003-10-24",
+    "timeline": [
+      {
+        "eventType": "vrm_change",
+        "eventDetails": {
+          "fromVrm": "KPL752",
+          "toVrm": "KPL753"
+        }
+      }
+    ]
+  },
+  {
+    "id": "0750dbb8-18d8-4697-8ec6-b6ed1c3aba96"
+  },
+  {
+    "id": "17700311-69b5-4104-bbc0-d8e4757d2b05"
+  }
+]
