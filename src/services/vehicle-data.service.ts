@@ -1,17 +1,38 @@
-import {TimelineEvent, VehicleDetails} from '../models/vehicle.model';
+import { TimelineEvent, VehicleDetails } from '../models/vehicle.model';
+import vehicleData from '../../vehicle-data.json';
+import { parseDateInMs } from '../utils/date-helper';
 
 export class VehicleDataService {
 
-    private vehicleData: { [key: string]: VehicleDetails } = {};
+    private vehicleData: { [vrm: string]: VehicleDetails } = {};
 
     constructor() {
-        // TODO: it should load the data from the a .json file
+        for (const vehicle of vehicleData) {
+            if (typeof vehicle.vrm === 'string') {
+                this.vehicleData[vehicle.vrm] = this.parseVehicleDates(vehicle);
+            }
+        }
     }
 
     public parseVehicleDates(obj: any): any {
-        // TODO: it should parse the dates of any nested object recursively by finding any fields
-        //  that contain the word 'date' using regex
-        throw new Error('Not implemented');
+
+        if ( ['string', 'number'].includes(typeof obj) ) {
+            return;
+        }
+
+        for (const [key, val] of Object.entries(obj)) {
+            if (Array.isArray(val)) {
+                // TODO: handle the case where the array contains only primitives
+                obj[key] = val.map(elem => this.parseVehicleDates(elem));
+            }
+            if (typeof val === 'string' && /date/gi.test(key)) {
+                obj[key] = parseDateInMs(val as string);
+            }
+            if (typeof val === 'object') {
+                obj[key] = this.parseVehicleDates(val);
+            }
+        }
+        return obj;
 
     }
 
@@ -29,12 +50,14 @@ export class VehicleDataService {
     public getPreviousTimelineEvents(vrm: string): { firstRegistrationDate: number, timeline: TimelineEvent[] } {
         // TODO: it should recursively find any backward registrations of vehicle instances and return the
         //  combined timeline of those
+        console.log(vrm);
         throw new Error('Not implemented');
     }
 
     public getFollowingTimelineEvents(vrm: string, skipInitialVrm = true): TimelineEvent[] {
         // TODO: it should recursively find any forward registrations of vehicle instances and return the
         //  combined timeline of those
+        console.log(vrm, skipInitialVrm);
         throw new Error('Not implemented');
     }
 

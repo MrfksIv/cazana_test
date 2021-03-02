@@ -1,6 +1,5 @@
 import {VehicleDataService} from './vehicle-data.service';
-
-const vehicleData: any[] = [];
+import vehicleData from '../../vehicle-data.json';
 
 describe('vehicle-data.service', () => {
     let vehicleDataInstance: VehicleDataService;
@@ -11,13 +10,45 @@ describe('vehicle-data.service', () => {
 
     describe('constructor', () => {
         it('should populate the vehicleData property correctly', () => {
-            expect(vehicleDataInstance.getCarDetailsByVrm('ADD_VRM_HERE')).toBeTruthy();
+            expect(vehicleDataInstance.getCarDetailsByVrm('KPL754')).toBeTruthy();
         });
     });
 
     describe('parseVehicleDates', () => {
         it('should parse any keys that contain the word \'date\' to milliseconds', () => {
+            const date = '2005-10-24';
+            const dummyData = {
+                "id": "b3bba5fc-92a4-4dcc-af4d-cd641faf69de",
+                "vrm": "KPL753",
+                "make": "Volkswagen",
+                "model": "Golf",
+                "registrationDate": date,
+                "timeline": [
+                    {
+                        "eventType": "vrm_change",
+                        "eventDetails": {
+                            "date": date,
+                            "fromVrm": "KPL752",
+                            "toVrm": "KPL753"
+                        }
+                    },
+                    {
+                        "eventType": "mot_test",
+                        "eventDetails": {
+                            "date": date,
+                            "mileage": 129385
+                        }
+                    }
+                ]
+            };
 
+            const parsedDatesDummyData = vehicleDataInstance.parseVehicleDates(dummyData);
+            const parsedDate = Date.parse(date);
+
+            expect(parsedDatesDummyData.registrationDate).toStrictEqual(parsedDate);
+            for (const timelineEvent of parsedDatesDummyData.timeline) {
+                expect(timelineEvent.eventDetails.date).toStrictEqual(parsedDate);
+            }
         });
     });
 
