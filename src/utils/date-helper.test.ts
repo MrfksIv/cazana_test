@@ -22,7 +22,8 @@ describe('date-helper', () => {
             ];
 
             for (const wrongDate of wrongDates) {
-                expect(() => parseDateInMs(wrongDate)).toThrow('msg');
+                expect(() => parseDateInMs(wrongDate))
+                    .toThrow(`String ${wrongDate} couldn't be parsed. (Should be of format yyyy-mm-dd)`);
             }
 
         });
