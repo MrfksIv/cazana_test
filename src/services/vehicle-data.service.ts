@@ -87,7 +87,7 @@ export class VehicleDataService implements VehicleTimelineGetter {
         return { firstRegistrationDate, timeline: fullTimeline };
     }
 
-    public getFollowingTimelineEvents(vrm: string): TimelineEvent[] {
+    public getFollowingTimelineEvents(vrm: string, skipInitialVrm = true): TimelineEvent[] {
         const initialCar = this.getCarDetailsByVrm(vrm);
         if (initialCar === null) {
             throw new Error(`Car with VRM ${vrm} was not found.`);
@@ -101,7 +101,13 @@ export class VehicleDataService implements VehicleTimelineGetter {
                 return;
             }
 
-            fullTimeline.push(...vehicle.timeline);
+            if(skipInitialVrm) {
+                if (vrm !== vehicle.vrm) {
+                    fullTimeline.push(...vehicle.timeline);
+                }
+            } else {
+                fullTimeline.push(...vehicle.timeline);
+            }
 
             const vrmChangeEvents = vehicle.timeline?.filter(event => event.eventType === TimelineEventTypes.VRM_CHANGE) ?? null;
 

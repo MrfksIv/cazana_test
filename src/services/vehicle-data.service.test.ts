@@ -123,7 +123,7 @@ describe('vehicle-data.service', () => {
                 .flat();
 
             const expectations = expectedEvents.map(event => expect.objectContaining(event));
-            const timeline = vehicleDataInstance.getFollowingTimelineEvents(initialCarVrm);
+            const timeline = vehicleDataInstance.getFollowingTimelineEvents(initialCarVrm, false);
 
             expect(timeline).toEqual(expect.arrayContaining(expectations));
             expect(timeline.length).toStrictEqual(expectedEvents.length);
@@ -139,7 +139,7 @@ describe('vehicle-data.service', () => {
 
 
             const expectations = expectedEvents.map(event => expect.objectContaining(event));
-            const timeline = vehicleDataInstance.getFollowingTimelineEvents(initialCarVrm);
+            const timeline = vehicleDataInstance.getFollowingTimelineEvents(initialCarVrm, false);
 
             expect(timeline).toEqual(expect.arrayContaining(expectations));
             expect(timeline.length).toStrictEqual(expectedEvents.length);
@@ -160,7 +160,11 @@ describe('vehicle-data.service', () => {
         it('should return the same array irrespectively of the initial VRM when multiple VRMs are connected', () => {
             const initialCarVrm = 'KPL752';
             const initialCarVrm2 = 'KPL753';
-            const initialCarVrm3 = 'KPL753';
+            const initialCarVrm3 = 'KPL754';
+
+            const expectedEvents = vehicleData.filter(vehicle => [initialCarVrm, initialCarVrm2, initialCarVrm3].includes(vehicle.vrm!))
+                .map(vehicle => vehicle.timeline)
+                .flat();
 
             const timeline1Events = vehicleDataInstance.getCompleteTimelineByVrm(initialCarVrm);
             const timeline2Events = vehicleDataInstance.getCompleteTimelineByVrm(initialCarVrm2);
@@ -176,6 +180,8 @@ describe('vehicle-data.service', () => {
 
             expect(timeline1Events.timeline.length).toStrictEqual(timeline2Events.timeline.length);
             expect(timeline1Events.timeline.length).toStrictEqual(timeline3Events.timeline.length);
+
+            expect(timeline1Events.timeline.length).toStrictEqual(expectedEvents.length);
         });
 
     });
