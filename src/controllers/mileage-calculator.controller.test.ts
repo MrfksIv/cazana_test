@@ -8,6 +8,30 @@ describe('mileage-calculator.controller', () => {
     beforeAll(() => {
         mileageCalculator = new MileageCalculator(new MockDataService());
     });
+
+    describe('calculateVehicleMileage', () => {
+
+        it ('should return the correct mileage values for vehicles with NO mileage events', () => {
+            const { averageMileage, totalMileage } = mileageCalculator.calculateVehicleMileage('VRM');
+
+            expect(averageMileage).toStrictEqual(0);
+            expect(totalMileage).toStrictEqual(0);
+        });
+
+        it ('should return the correct mileage values for vehicles with ONE mileage events', () => {
+            const { averageMileage, totalMileage } = mileageCalculator.calculateVehicleMileage('VRM');
+
+            expect(averageMileage).toStrictEqual(0);
+            expect(totalMileage).toStrictEqual(0);
+        });
+
+        it ('should return the correct mileage values for vehicles with MULTIPLE mileage events', () => {
+            const { averageMileage, totalMileage } = mileageCalculator.calculateVehicleMileage('VRM');
+
+            expect(averageMileage).toStrictEqual(0);
+            expect(totalMileage).toStrictEqual(0);
+        });
+    });
 });
 
 class MockDataService implements VehicleTimelineGetter {
