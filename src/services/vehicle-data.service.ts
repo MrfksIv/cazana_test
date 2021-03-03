@@ -1,7 +1,7 @@
-import { TimelineEvent, VehicleDetails } from '../models/vehicle.model';
+import {TimelineEvent, TimelineEventTypes, VehicleDetails, VrmChangeEvent} from '../models/vehicle.model';
 import vehicleData from '../../vehicle-data.json';
-import { parseDateInMs } from '../utils/date-helper';
-import { VehicleTimelineGetter } from '../models/VehicleTimelineGetter.interface';
+import {parseDateInMs} from '../utils/date-helper';
+import {VehicleTimelineGetter} from '../models/VehicleTimelineGetter.interface';
 
 export class VehicleDataService implements VehicleTimelineGetter {
 
@@ -49,17 +49,79 @@ export class VehicleDataService implements VehicleTimelineGetter {
     }
 
     public getPreviousTimelineEvents(vrm: string): { firstRegistrationDate: number, timeline: TimelineEvent[] } {
-        // TODO: it should recursively find any backward registrations of vehicle instances and return the
-        //  combined timeline of those
-        console.log(vrm);
-        throw new Error('Not implemented');
+        const initialCar = this.getCarDetailsByVrm(vrm);
+        if (initialCar === null) {
+            throw new Error(`Car with VRM ${vrm} was not found.`);
+        }
+
+        const fullTimeline: TimelineEvent[] = [];
+        let firstRegistrationDate = initialCar.registrationDate;
+
+        const that = this;
+
+        (function recursiveSearch(vehicle: VehicleDetails): void {
+            if (!vehicle.timeline) {
+                return;
+            }
+            fullTimeline.push(...vehicle.timeline);
+            firstRegistrationDate = vehicle.registrationDate;
+
+            const vrmChangeEvents = vehicle.timeline
+                ?.filter((event) => event.eventType === TimelineEventTypes.VRM_CHANGE) ?? null;
+
+            // if no VRM Change events are available, return the current timeline if it exists, null otherwise
+            if (vrmChangeEvents === null) {
+                return;
+            }
+            const previousVrmEvent = vrmChangeEvents
+                .filter((event) => (event.eventDetails as VrmChangeEvent).toVrm === vehicle.vrm);
+            if (previousVrmEvent.length > 0) {
+                const previousCar = that.getCarDetailsByVrm((previousVrmEvent[0].eventDetails as VrmChangeEvent).fromVrm);
+                if (previousCar === null) {
+                    return;
+                }
+                return recursiveSearch(previousCar);
+            }
+        })(initialCar);
+
+        return { firstRegistrationDate, timeline: fullTimeline };
     }
 
     public getFollowingTimelineEvents(vrm: string): TimelineEvent[] {
-        // TODO: it should recursively find any forward registrations of vehicle instances and return the
-        //  combined timeline of those
-        console.log(vrm);
-        throw new Error('Not implemented');
+        const initialCar = this.getCarDetailsByVrm(vrm);
+        if (initialCar === null) {
+            throw new Error(`Car with VRM ${vrm} was not found.`);
+        }
+
+        const fullTimeline: TimelineEvent[] = [];
+        const that = this;
+
+        (function recursiveSearch(vehicle: VehicleDetails): void {
+            if (!vehicle.timeline) {
+                return;
+            }
+
+            fullTimeline.push(...vehicle.timeline);
+
+            const vrmChangeEvents = vehicle.timeline?.filter(event => event.eventType === TimelineEventTypes.VRM_CHANGE) ?? null;
+
+            if (vrmChangeEvents === null) {
+                return;
+            }
+
+            const followingVrmEvent = vrmChangeEvents.filter(event => (event.eventDetails as VrmChangeEvent).fromVrm === vehicle.vrm);
+            if (followingVrmEvent.length > 0) {
+                const nextCar = that.getCarDetailsByVrm((followingVrmEvent[0].eventDetails  as VrmChangeEvent).toVrm);
+
+                if (nextCar === null) {
+                    return;
+                }
+                return recursiveSearch(nextCar);
+            }
+
+        })(initialCar);
+
+        return fullTimeline;
     }
 
 
