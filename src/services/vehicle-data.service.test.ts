@@ -63,29 +63,55 @@ describe('vehicle-data.service', () => {
 
     describe('getPreviousRegistrations', () => {
         it('should return an empty array if the car doesn\'t have any timeline events', () => {
-
+            expect(vehicleDataInstance.getPreviousTimelineEvents('EKE699')).toStrictEqual([]);
         });
 
         it('should throw an error if the initial VRM is not found in the available vehicle data', () => {
-
+            const nonExistingVrm = 'AAA111';
+            const errorMessage = `Car with VRM ${nonExistingVrm} was not found.`;
+            expect(() => vehicleDataInstance.getPreviousTimelineEvents(nonExistingVrm)).toThrow(errorMessage);
         });
 
         it('should return the timeline events of ALL previous registrations (2 previous registrations)', () => {
+            const initialCarVrm = 'KPL754';
+            const previousCarVrms = ['KPL753', 'KPL752'];
+
+            const expectedEvents = vehicleData.filter(vehicle => [initialCarVrm, ...previousCarVrms].includes(vehicle.vrm!))
+                .map(vehicle => vehicle.timeline)
+                .flat();
+
+            const expectations = expectedEvents.map(event => expect.objectContaining(event));
+            const timeline = vehicleDataInstance.getPreviousTimelineEvents(initialCarVrm).timeline
+            expect(timeline).toEqual(expect.arrayContaining(expectations));
+            expect(timeline.length).toStrictEqual(expectedEvents.length);
 
         });
 
         it('should return the timeline events of ALL previous registrations (1 previous registration)', () => {
+            const initialCarVrm = 'KPL753';
+            const previousCarVrm = 'KPL752';
 
+            const expectedEvents = vehicleData.filter(vehicle => [initialCarVrm, previousCarVrm].includes(vehicle.vrm!))
+                .map(vehicle => vehicle.timeline)
+                .flat();
+
+            const expectations = expectedEvents.map(event => expect.objectContaining(event));
+            const timeline = vehicleDataInstance.getPreviousTimelineEvents(initialCarVrm).timeline;
+
+            expect(timeline).toEqual(expect.arrayContaining(expectations));
+            expect(timeline.length).toStrictEqual(expectedEvents.length);
         });
     });
 
     describe('getFollowingRegistrations', () => {
         it('should return an empty array if the car doesn\'t have any timeline events', () => {
-
+            expect(vehicleDataInstance.getPreviousTimelineEvents('EKE699')).toStrictEqual([]);
         });
 
         it('should throw an error if the initial VRM is not found in the available vehicle data', () => {
-
+            const nonExistingVrm = 'AAA111';
+            const errorMessage = `Car with VRM ${nonExistingVrm} was not found.`;
+            expect(() => vehicleDataInstance.getPreviousTimelineEvents(nonExistingVrm)).toThrow(errorMessage);
         });
 
         it('should return the timeline events of ALL following registrations (2 future registrations)', () => {
@@ -99,11 +125,13 @@ describe('vehicle-data.service', () => {
 
     describe('getCompleteTimelineByVrm', () => {
         it('should return an empty array if the car doesn\'t have any timeline events', () => {
-
+            expect(vehicleDataInstance.getPreviousTimelineEvents('EKE699')).toStrictEqual([]);
         });
 
         it('should throw an error if the initial VRM is not found in the available vehicle data', () => {
-
+            const nonExistingVrm = 'AAA111';
+            const errorMessage = `Car with VRM ${nonExistingVrm} was not found.`;
+            expect(() => vehicleDataInstance.getPreviousTimelineEvents(nonExistingVrm)).toThrow(errorMessage);
         });
 
         it('should return the same array irrespectively of the initial VRM when multiple VRMs are connected', () => {

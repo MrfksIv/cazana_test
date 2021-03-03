@@ -54,6 +54,13 @@
     "registrationDate": "2003-10-24",
     "timeline": [
       {
+        "eventType": "mot_test",
+        "eventDetails": {
+          "mileage": 100,
+          "date": "2005-10-24"
+        }
+      },
+      {
         "eventType": "vrm_change",
         "eventDetails": {
           "fromVrm": "KPL752",
