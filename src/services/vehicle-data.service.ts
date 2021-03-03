@@ -55,10 +55,10 @@ export class VehicleDataService implements VehicleTimelineGetter {
         throw new Error('Not implemented');
     }
 
-    public getFollowingTimelineEvents(vrm: string, skipInitialVrm = true): TimelineEvent[] {
+    public getFollowingTimelineEvents(vrm: string): TimelineEvent[] {
         // TODO: it should recursively find any forward registrations of vehicle instances and return the
         //  combined timeline of those
-        console.log(vrm, skipInitialVrm);
+        console.log(vrm);
         throw new Error('Not implemented');
     }
 

@@ -81,7 +81,7 @@ describe('vehicle-data.service', () => {
                 .flat();
 
             const expectations = expectedEvents.map(event => expect.objectContaining(event));
-            const timeline = vehicleDataInstance.getPreviousTimelineEvents(initialCarVrm).timeline
+            const timeline = vehicleDataInstance.getPreviousTimelineEvents(initialCarVrm).timeline;
             expect(timeline).toEqual(expect.arrayContaining(expectations));
             expect(timeline.length).toStrictEqual(expectedEvents.length);
 
@@ -115,11 +115,33 @@ describe('vehicle-data.service', () => {
         });
 
         it('should return the timeline events of ALL following registrations (2 future registrations)', () => {
+            const initialCarVrm = 'KPL752';
+            const nextCarVrms = ['KPL753', 'KPL754'];
 
+            const expectedEvents = vehicleData.filter(vehicle => [initialCarVrm, ...nextCarVrms].includes(vehicle.vrm!))
+                .map(vehicle => vehicle.timeline)
+                .flat();
+
+            const expectations = expectedEvents.map(event => expect.objectContaining(event));
+            const timeline = vehicleDataInstance.getPreviousTimelineEvents(initialCarVrm).timeline;
+
+            expect(timeline).toEqual(expect.arrayContaining(expectations));
+            expect(timeline.length).toStrictEqual(expectedEvents.length);
         });
 
         it('should return the timeline events of ALL following registrations (1 future registration)', () => {
+            const initialCarVrm = 'KPL753';
+            const nextCarVrm = 'KPL754';
 
+            const expectedEvents = vehicleData.filter(vehicle => [initialCarVrm, nextCarVrm].includes(vehicle.vrm!))
+                .map(vehicle => vehicle.timeline)
+                .flat();
+
+            const expectations = expectedEvents.map(event => expect.objectContaining(event));
+            const timeline = vehicleDataInstance.getPreviousTimelineEvents(initialCarVrm).timeline;
+
+            expect(timeline).toEqual(expect.arrayContaining(expectations));
+            expect(timeline.length).toStrictEqual(expectedEvents.length);
         });
     });
 
@@ -135,7 +157,24 @@ describe('vehicle-data.service', () => {
         });
 
         it('should return the same array irrespectively of the initial VRM when multiple VRMs are connected', () => {
+            const initialCarVrm = 'KPL752';
+            const initialCarVrm2 = 'KPL753';
+            const initialCarVrm3 = 'KPL753';
 
+            const timeline1Events = vehicleDataInstance.getCompleteTimelineByVrm(initialCarVrm);
+            const timeline2Events = vehicleDataInstance.getCompleteTimelineByVrm(initialCarVrm2);
+            const timeline3Events = vehicleDataInstance.getCompleteTimelineByVrm(initialCarVrm3);
+
+            const arrayExpectations2 = timeline2Events.timeline.map(event => expect.objectContaining(event));
+            const arrayExpectations3 = timeline3Events.timeline.map(event => expect.objectContaining(event));
+
+            expect(timeline1Events.timeline)
+                .toEqual(expect.arrayContaining(arrayExpectations2));
+            expect(timeline1Events.timeline)
+                .toEqual(expect.arrayContaining(arrayExpectations3));
+
+            expect(timeline1Events.timeline.length).toStrictEqual(timeline2Events.timeline.length);
+            expect(timeline1Events.timeline.length).toStrictEqual(timeline3Events.timeline.length);
         });
 
     });

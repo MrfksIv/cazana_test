@@ -7,6 +7,13 @@
     "registrationDate": "2007-10-23",
     "timeline": [
       {
+        "eventType": "advertisement",
+        "eventDetails": {
+          "mileage": 1500,
+          "date": "2020-01-01"
+        }
+      },
+      {
         "eventType": "vrm_change",
         "eventDetails": {
           "fromVrm": "KPL753",
