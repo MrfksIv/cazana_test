@@ -3,7 +3,8 @@
 ## Usage
 ### Prerequisites
 You will need to have NodeJS (version >= 12.13) and npm (version >= 6.14). Using previous
-versions does not guarantee that the program will run correctly.
+versions does not guarantee that the program will run correctly as it uses some ES2018 methods
+which have only been available in the latest versions of Node (e.g. `Array.pototype.flat()`).
 
 ### Installation
 First, you will need to install the dependencies. From the command line run:
@@ -12,7 +13,8 @@ npm install
 ```
 
 ### Running the tests
-To run the tests use the command:
+According to the task instructions, the program runs through the unit tests created using Jest. 
+To run them, use the command:
 ```shell
 npm test
 ```
