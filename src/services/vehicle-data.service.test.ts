@@ -23,6 +23,7 @@ describe('vehicle-data.service', () => {
                 "make": "Volkswagen",
                 "model": "Golf",
                 "registrationDate": date,
+                "arrayOfPrimitives": ['a', 'b', 3],
                 "timeline": [
                     {
                         "eventType": "vrm_change",
