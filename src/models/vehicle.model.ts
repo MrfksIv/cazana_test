@@ -25,16 +25,16 @@ export interface TimelineSpecificEvent<T > {
     eventDetails : T;
 }
 
-export interface BaseTimelineEvent {
+export interface MileageEvent {
     date: number;
     mileage: number;
 }
 
-export interface AdvertisementEvent extends BaseTimelineEvent {
+export interface AdvertisementEvent extends MileageEvent {
     price: number;
 }
 
-export interface MotTestEvent extends BaseTimelineEvent {
+export interface MotTestEvent extends MileageEvent {
 
 }
 
